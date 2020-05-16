@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Script backup wiki
+
+# DATA=${DATA}
+DEFAULT_BACKUP=${SERVER_BACKUP_PATH:-.}
+BACKUP=${1:-$DEFAULT_BACKUP}
+
+EXCLUDE=""
+EXCLUDE=" $EXCLUDE --exclude data/cache/"
+EXCLUDE=" $EXCLUDE --exclude data/index/"
+EXCLUDE=" $EXCLUDE --exclude data/locks/"
+EXCLUDE=" $EXCLUDE --exclude data/tmp/"
+
+rsync -av --delete $EXCLUDE ${DATA%/}/ ${BACKUP%/}/
