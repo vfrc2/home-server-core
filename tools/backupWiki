@@ -2,7 +2,6 @@
 
 # Script backup wiki
 
-# DATA=${DATA}
 DEFAULT_BACKUP=${SERVER_BACKUP_PATH:-.}
 BACKUP=${1:-$DEFAULT_BACKUP}
 
@@ -12,4 +11,10 @@ EXCLUDE=" $EXCLUDE --exclude data/index/"
 EXCLUDE=" $EXCLUDE --exclude data/locks/"
 EXCLUDE=" $EXCLUDE --exclude data/tmp/"
 
-rsync -av --delete $EXCLUDE ${DATA%/}/ ${BACKUP%/}/
+echo Backup wiki to $SERVER_BACKUP_PATH/wiki
+
+/usr/bin/docker run --rm \
+    -v wiki:/data:ro \
+    -v ${BACKUP}:/backup \
+    eeacms/rsync \
+    rsync -av --delete $EXCLUDE /data/dokuwiki/ /backup/wiki/

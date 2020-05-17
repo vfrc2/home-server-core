@@ -12,6 +12,7 @@ services:
       - proxy
     environment:
       - VIRTUAL_HOST=portainer.${SERVER_HOST_NAME}
+    restart: always
   wiki:
     image: 'bitnami/dokuwiki:0'
     ports:
@@ -19,9 +20,12 @@ services:
       - '8443:443'
     volumes:
       - wiki:/bitnami
+    networks:
+      - proxy
     environment:
       - VIRTUAL_HOST=${SERVER_HOST_NAME}
       - CERT_NAME=root.${SERVER_HOST_NAME}
+    restart: always
   proxy:
     image: jwilder/nginx-proxy
     ports:
@@ -33,6 +37,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - proxy
+    restart: always
 
 volumes: 
   wiki:
